@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { urlBase } from './url.js';
+import { endpoints } from './url.js';
 
 const UserPost = () => {
   // const [form, setForm] = useState({
@@ -11,6 +11,8 @@ const UserPost = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const { url_base, user_post } = endpoints;
 
   // const handleForm = ({ target }) => {
   //   const { id, value } = target;
@@ -29,7 +31,7 @@ const UserPost = () => {
       body: JSON.stringify({ username, email, password }),
     };
 
-    const formResponse = await fetch(urlBase + 'api/user', options);
+    const formResponse = await fetch(url_base + user_post, options);
     console.log(formResponse);
     const formJson = await formResponse.json();
     console.log(formJson);

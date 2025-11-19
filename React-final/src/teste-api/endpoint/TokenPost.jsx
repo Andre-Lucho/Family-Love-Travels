@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { urlBase } from './url.js';
+import { endpoints } from './url.js';
 
 const TokenPost = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [token, setToken] = useState(null);
+
+  const { url_base, token_post } = endpoints;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -18,7 +20,7 @@ const TokenPost = () => {
       body: JSON.stringify({ username, password }),
     };
 
-    const formResponse = await fetch(urlBase + 'jwt-auth/v1/token', options);
+    const formResponse = await fetch(url_base + token_post, options);
     console.log(formResponse);
     const formJson = await formResponse.json();
     console.log(formJson);

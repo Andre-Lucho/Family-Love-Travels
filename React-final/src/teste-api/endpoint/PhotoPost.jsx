@@ -1,32 +1,39 @@
 import { useState } from 'react';
-import { urlBase } from './url.js';
+import { endpoints } from './url.js';
 
 const PhotoPost = () => {
   const [token, setToken] = useState('');
 
-  const [name, setName] = useState('');
-  const [weight, setWeight] = useState('');
-  const [age, setAge] = useState('');
+  const [nome, setNome] = useState('');
+  const [peso, setpeso] = useState('');
+  const [idade, setIdade] = useState('');
   const [img, setImg] = useState('');
+
+  const { url_base, photo_post } = endpoints;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    const formData = new FormData();
+    // key e valor
+    formData.append('img', img);
+    formData.append('nome', nome);
+    formData.append('peso', peso);
+    formData.append('idade', idade);
+
     const options = {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
       },
-      // body: devo passar como string
-      body: {},
+      body: formData,
     };
 
-    const formResponse = await fetch(urlBase + 'api/photo', options);
+    const formResponse = await fetch(url_base + photo_post, options);
     console.log(formResponse);
     const formJson = await formResponse.json();
     console.log(formJson);
   };
-
-  // const { username, email, password } = form;
 
   return (
     <form onSubmit={handleSubmit} className="mx-3 my-5 block">
@@ -38,28 +45,28 @@ const PhotoPost = () => {
         onChange={({ target }) => setToken(target.value)}
         className="my-3 block border-2 border-blue-500"
       />
-      <label htmlFor="username">Username</label>
+      <label htmlFor="nome">Nome</label>
       <input
         type="text"
-        id="name"
-        value={name}
-        onChange={({ target }) => setName(target.value)}
+        id="nome"
+        value={nome}
+        onChange={({ target }) => setNome(target.value)}
         className="my-3 block border-2 border-blue-500"
       />
-      <label htmlFor="weight">Peso</label>
+      <label htmlFor="peso">Peso</label>
       <input
         type="text"
-        id="weight"
-        value={weight}
-        onChange={({ target }) => setWeight(target.value)}
+        id="peso"
+        value={peso}
+        onChange={({ target }) => setpeso(target.value)}
         className="my-3 block border-2 border-blue-500"
       />
-      <label htmlFor="age">Idade</label>
+      <label htmlFor="idade">Idade</label>
       <input
         type="text"
-        id="age"
-        value={age}
-        onChange={({ target }) => setAge(target.value)}
+        id="idade"
+        value={idade}
+        onChange={({ target }) => setIdade(target.value)}
         className="my-3 block border-2 border-blue-500"
       />
       <label className="mt-10 block" htmlFor="img">
@@ -71,6 +78,9 @@ const PhotoPost = () => {
         onChange={({ target }) => setImg(target.files[0])}
         className="mt-5 py-2 px-3 bg-red-400 border-2 border-red-700 text-black block"
       />
+      <button className="mt-2 py-2 px-3 bg-blue-400 border-2 border-blue-500 ">
+        Enviar
+      </button>
     </form>
   );
 };
