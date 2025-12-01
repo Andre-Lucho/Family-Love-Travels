@@ -5,7 +5,7 @@ import { LuDoorOpen } from 'react-icons/lu';
 
 const Header = () => {
   return (
-    <header className="w-full py-2.5 px-0 fixed z-20 top-0 shadow-sm bg-[#161c26]">
+    <header className="w-full py-1 px-0 fixed z-20 top-0 shadow-sm bg-[#161c26]">
       <nav className="flex justify-between items-center mx-6 h-16 text-white .container">
         <Link to={'/'} aria-label="Home" className="py-2 px-0">
           {/* logo */}

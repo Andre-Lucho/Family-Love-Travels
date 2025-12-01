@@ -41,8 +41,21 @@
     max-width: 100%;
   }
 
-  button,
+  label {
+    display: block;
+    line-height: 1;
+    padding-bottom: 0.5rem;
+  }
+
   input {
+    display: block;
+    width: 100%;
+    font-size: 1rem;
+    font-family: var(--font-primary);
+    color: text-dark;
+  }
+
+  button {
     display: block;
     font-size: 1rem;
     font-family: var(--font-primary);

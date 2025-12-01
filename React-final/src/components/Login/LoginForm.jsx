@@ -42,7 +42,7 @@ const LoginForm = () => {
   useEffect(() => console.log(fetchData), [fetchData]);
 
   return (
-    <section className="m-2">
+    <section className="my-2">
       <h1>Login</h1>
       <form onSubmit={handleSubmit}>
         <Input label={'Usuário'} type={'text'} id={'username'} {...username} />
@@ -52,7 +52,7 @@ const LoginForm = () => {
           id={'password'}
           {...password}
         />
-        <Buttom />
+        <Buttom label={'Entrar'} />
       </form>
       <Link to="/login/register">Cadastre-se</Link>
       <Link to="/login/lost">Perdeu seu senha?</Link>
