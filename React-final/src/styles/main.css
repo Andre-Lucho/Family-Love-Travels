@@ -46,7 +46,7 @@
     display: block;
     font-size: 1rem;
     font-family: var(--font-primary);
-    color: #333;
+    color: text-dark;
   }
 
   a {
