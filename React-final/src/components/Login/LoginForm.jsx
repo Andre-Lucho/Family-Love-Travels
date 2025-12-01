@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Input from '../Form/Input';
-import useForm from '../Hooks/useForm';
-import useFetch from '../Hooks/useFetch';
+import useForm from '../../Hooks/useForm';
+import useFetch from '../../Hooks/useFetch';
 import { useEffect } from 'react';
 import Buttom from '../Form/Buttom';
 

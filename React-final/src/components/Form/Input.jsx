@@ -1,4 +1,4 @@
-import useForm from '../Hooks/useForm';
+import useForm from '../../Hooks/useForm';
 
 const Input = ({ id, label, type, error, ...props }) => {
   const { value, onChange } = useForm();
