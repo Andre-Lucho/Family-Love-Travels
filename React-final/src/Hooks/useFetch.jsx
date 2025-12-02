@@ -5,7 +5,6 @@ const useFetch = () => {
   const [loading, setLoading] = useState(null);
   const [error, setError] = useState(null);
   const [response, setResponse] = useState(null);
-  const [jsonReturn, setJsonReturn] = useState(null);
 
   const request = useCallback(async (url, options) => {
     let response, json;
@@ -15,7 +14,6 @@ const useFetch = () => {
       response = await fetch(url, options);
       json = await response.json();
       setResponse(response);
-      setJsonReturn(json);
     } catch (erro) {
       json = null;
       setError(erro);
@@ -32,8 +30,6 @@ const useFetch = () => {
     fetchData,
     setResponse,
     response,
-    setJsonReturn,
-    jsonReturn,
     setError,
     error,
     setLoading,

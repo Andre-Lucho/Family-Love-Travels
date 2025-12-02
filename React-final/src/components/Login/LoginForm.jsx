@@ -1,18 +1,40 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+
 import useForm from '../../Hooks/useForm';
 import useFetch from '../../Hooks/useFetch';
+import useLocalStorage from '../../Hooks/useLocalStorage';
+
 import Input from '../Form/Input';
 import Buttom from '../Form/Buttom';
-import { TOKEN_POST } from '../../api.js';
+import { TOKEN_POST, USER_GET } from '../../api.js';
 
 const LoginForm = () => {
   const username = useForm('');
   const password = useForm('');
+  const tokenFetch = useFetch();
+  const userFetch = useFetch();
+  const [local, setLocal] = useLocalStorage('token', '');
 
-  const { request, response, fetchData } = useFetch();
+  useEffect(() => {
+    if (local) getUser(local);
+  }, [local]);
 
-  const getUser = (token) => {};
+  useEffect(() => {
+    if (
+      tokenFetch.response &&
+      tokenFetch.fetchData &&
+      tokenFetch.fetchData.token
+    )
+      setLocal(tokenFetch.fetchData.token);
+  }, [userFetch.response, tokenFetch.fetchData]);
+
+  useEffect(() => console.log(userFetch.fetchData), [userFetch.fetchData]);
+
+  const getUser = async (token) => {
+    const { url, options } = USER_GET(token);
+    userFetch.request(url, options);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,13 +45,11 @@ const LoginForm = () => {
         password: password.value,
       });
 
-      request(url, options);
+      tokenFetch.request(url, options);
     } else {
       console.log('Formulário inválido. Corrija os erros.');
     }
   };
-
-  useEffect(() => console.log(fetchData.token), [fetchData]);
 
   return (
     <section className="my-2">
