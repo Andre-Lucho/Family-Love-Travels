@@ -1,51 +1,34 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import useForm from '../../Hooks/useForm';
-import useFetch from '../../Hooks/useFetch';
-import useLocalStorage from '../../Hooks/useLocalStorage';
-
 import Input from '../Form/Input';
 import Buttom from '../Form/Buttom';
-import { TOKEN_POST, USER_GET } from '../../api.js';
+import { UserContext } from '../../UserContext';
 
 const LoginForm = () => {
+  const { userLogin } = useContext(UserContext);
   const username = useForm('');
   const password = useForm('');
-  const tokenFetch = useFetch();
-  const userFetch = useFetch();
-  const [local, setLocal] = useLocalStorage('token', '');
 
-  useEffect(() => {
-    if (local) getUser(local);
-  }, [local]);
-
-  useEffect(() => {
-    if (
-      tokenFetch.response &&
-      tokenFetch.fetchData &&
-      tokenFetch.fetchData.token
-    )
-      setLocal(tokenFetch.fetchData.token);
-  }, [userFetch.response, tokenFetch.fetchData]);
-
-  useEffect(() => console.log(userFetch.fetchData), [userFetch.fetchData]);
-
-  const getUser = async (token) => {
-    const { url, options } = USER_GET(token);
-    userFetch.request(url, options);
-  };
+  // useEffect(() => {
+  //   let token = localStorage.getItem('token');
+  //   if (token) {
+  //     getUser(token);
+  //     console.log('2॰ getUser');
+  //   }
+  // }, [login]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (username.validate() && password.validate()) {
-      const { url, options } = TOKEN_POST({
-        username: username.value,
-        password: password.value,
-      });
-
-      tokenFetch.request(url, options);
+      try {
+        await userLogin(username.value, password.value);
+        console.log('Token ok');
+      } catch (error) {
+        console.error('Erro no login:', error);
+      }
     } else {
       console.log('Formulário inválido. Corrija os erros.');
     }

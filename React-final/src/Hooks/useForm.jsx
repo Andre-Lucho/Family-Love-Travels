@@ -11,7 +11,7 @@ const types = {
     message: 'Email inválido',
   },
   password: {
-    regex: /^\d{5}-?\d{3}$/,
+    regex: /^.{6,}$/,
     message: 'Senha inválida',
   },
 };

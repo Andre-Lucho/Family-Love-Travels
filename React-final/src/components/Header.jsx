@@ -1,9 +1,14 @@
-import React from 'react';
+import { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../UserContext';
+
 import { FaRegPaperPlane } from 'react-icons/fa';
 import { LuDoorOpen } from 'react-icons/lu';
+import Buttom from './Form/Buttom';
 
 const Header = () => {
+  const { login, data, userLogout } = useContext(UserContext);
+
   return (
     <header className="w-full py-1 px-0 fixed z-20 top-0 shadow-sm bg-[#161c26]">
       <nav className="flex justify-between items-center mx-6 h-16 text-white .container">
@@ -11,18 +16,17 @@ const Header = () => {
           {/* logo */}
           <FaRegPaperPlane className="mr-1.5 h-8 w-8" />
         </Link>
-        <Link
-          to={'/login'}
-          className="
-          flex
-          items-center
-          py-2 px-0          
-          "
-        >
-          Login / Criar
-          <LuDoorOpen className="ml-1.5 mb-1 h-6 w-8" />
-        </Link>
-        {/* login */}
+        {login ? (
+          <Link to={'/userPage'} className="flex items-center py-2 px-0">
+            {data.nome}
+            <Buttom label={'Sair'} onClick={userLogout} />
+          </Link>
+        ) : (
+          <Link to={'/login'} className="flex items-center py-2 px-0">
+            Login / Criar
+          </Link>
+        )}
+        <LuDoorOpen className="ml-1.5 mb-1 h-6 w-8" />
       </nav>
     </header>
   );
