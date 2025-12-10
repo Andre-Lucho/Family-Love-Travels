@@ -8,7 +8,7 @@ import { UserContext } from '../../UserContext';
 import Loading from '../Loading';
 
 const LoginForm = () => {
-  const { userLogin, error, loading } = useContext(UserContext);
+  const { userLogin, error, loading, login } = useContext(UserContext);
   const username = useForm('');
   const password = useForm('');
 
@@ -39,9 +39,9 @@ const LoginForm = () => {
           {...password}
         />
         {loading ? (
-          <Buttom label={'Entrar'} />
+          <Buttom label={'Entrar'} disabled />
         ) : (
-          <Buttom label={'Entrar'} disable />
+          <Buttom label={'Entrar'} />
         )}
 
         <Loading />

@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { TOKEN_POST, TOKEN_VALIDATE_POST, USER_GET } from './api.js';
 
@@ -10,8 +11,10 @@ export const UserStorage = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    const login = async () => {
+    const autoLogin = async () => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
@@ -22,7 +25,6 @@ export const UserStorage = ({ children }) => {
         } catch (err) {
           const errorMessage = err.response.data.message || 'Erro desconhecido';
           setError(errorMessage);
-          // caso de erro no fetch, reseta todos os dados de login
           userLogout();
           throw err;
         } finally {
@@ -30,10 +32,8 @@ export const UserStorage = ({ children }) => {
         }
       }
     };
-    login();
-  }, [login]);
-
-  useEffect(() => console.log(error), [error]);
+    autoLogin();
+  }, []);
 
   const getUser = async (token) => {
     const { url, config } = USER_GET(token);
@@ -59,6 +59,7 @@ export const UserStorage = ({ children }) => {
         const token = tokenRes.data.token;
         localStorage.setItem('token', token);
         await getUser(token);
+        navigate('/userPage');
       }
     } catch (err) {
       const errorMessage = err.response.data.message || 'Erro desconhecido';
@@ -81,11 +82,21 @@ export const UserStorage = ({ children }) => {
     }
   };
 
-  const userLogout = async () => {
-    setLogin(false);
-    setData(null);
-    setLoading(false);
-    localStorage.removeItem('token');
+  const userLogout = () => {
+    try {
+      setLogin(false);
+      setData(null);
+      setLoading(false);
+      localStorage.removeItem('token');
+      setTimeout(() => {
+        navigate('/login');
+      }, 0);
+    } catch (err) {
+      console.log(err);
+      setTimeout(() => {
+        navigate('/');
+      }, 0);
+    }
   };
 
   return (
