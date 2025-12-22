@@ -1,16 +1,15 @@
 import { useContext, useState, useEffect } from 'react';
 import { UserContext } from '../../UserContext';
 
-import axios from 'axios';
+// import axios from 'axios';
 import { USER_POST } from '../../api.js';
 
 import Input from '../Form/Input';
 import Button from '../Form/Buttom';
 import useForm from '../Hooks/useForm.jsx';
+import useFetch from '../Hooks/useFetch.jsx';
 
 const LoginRegister = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [id, setId] = useState(null);
 
   const username = useForm('');
@@ -18,10 +17,12 @@ const LoginRegister = () => {
   const password = useForm('');
 
   const { userLogin } = useContext(UserContext);
+  const { request, loading, error } = useFetch();
 
   useEffect(() => console.log(id), [id]);
 
-  const createUser = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (username.validate() && email.validate() && password.validate()) {
       const { url, body } = USER_POST({
         username: username.value,
@@ -29,7 +30,7 @@ const LoginRegister = () => {
         password: password.value,
       });
       try {
-        const user = await axios.post(url, body);
+        const user = await request(url, 'post', body);
         if (user.data) {
           setId(user.data);
           await userLogin(username.value, password.value);
@@ -37,20 +38,6 @@ const LoginRegister = () => {
       } catch (err) {
         console.log(err.response);
       }
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      setError(null);
-      setLoading(true);
-      await createUser();
-    } catch (err) {
-      setError(err);
-      throw err;
-    } finally {
-      setLoading(false);
     }
   };
 

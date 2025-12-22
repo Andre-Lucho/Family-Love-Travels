@@ -1,38 +1,32 @@
 import { useState, useCallback } from 'react';
+import axios from 'axios';
 
 const useFetch = () => {
-  const [fetchData, setFetchData] = useState(null);
-  const [loading, setLoading] = useState(null);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [response, setResponse] = useState(null);
 
-  const request = useCallback(async (url, options) => {
-    let response, json;
+  const request = useCallback(async (url, method, body = null, config = {}) => {
+    let res;
     try {
       setError(null);
       setLoading(true);
-      response = await fetch(url, options);
-      json = await response.json();
-      setResponse(response);
+      res = await axios({ url, method, data: body, config });
+      setData(res.data);
+      return { response: res, json: res.data };
     } catch (erro) {
-      json = null;
-      setError(erro);
+      setData(null);
+      setError(erro.message);
+      return { response: null, json: null };
     } finally {
-      setFetchData(json);
       setLoading(false);
-      return { response, json };
     }
   }, []);
 
   return {
     request,
-    setFetchData,
-    fetchData,
-    setResponse,
-    response,
-    setError,
+    data,
     error,
-    setLoading,
     loading,
   };
 };
