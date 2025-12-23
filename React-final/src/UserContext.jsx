@@ -1,15 +1,15 @@
 import { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { TOKEN_POST, TOKEN_VALIDATE_POST, USER_GET } from './api.js';
+
+import useFetch from './components/Hooks/useFetch.jsx';
 
 export const UserContext = createContext();
 
 export const UserStorage = ({ children }) => {
-  const [data, setData] = useState(null);
   const [login, setLogin] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { request, setData, setLoading, setError, data, loading, error } =
+    useFetch();
 
   const navigate = useNavigate();
 
@@ -38,10 +38,10 @@ export const UserStorage = ({ children }) => {
   const getUser = async (token) => {
     const { url, config } = USER_GET(token);
     try {
-      const UserRes = await axios.get(url, config);
-      console.log(UserRes.data);
-      if (UserRes.data) {
-        setData(UserRes.data);
+      const { response, json } = await request(url, 'get', {}, config);
+      console.log(response);
+      if (response && response.status === 200) {
+        setData(json);
         setLogin(true);
       }
     } catch (err) {
@@ -52,13 +52,10 @@ export const UserStorage = ({ children }) => {
   const userLogin = async (username, password) => {
     const { url, body } = TOKEN_POST({ username, password });
     try {
-      setError(null);
-      setLoading(true);
-      const tokenRes = await axios.post(url, body);
-      // if (!tokenRes.ok) throw new Error('Token inválido');
-      if (tokenRes.data) {
-        // console.log(tokenRes.data);
-        const token = tokenRes.data.token;
+      const { response, json } = await request(url, 'post', body);
+      console.log(response);
+      if ((response && response.status === 200) || response.status === 201) {
+        const token = json.token;
         localStorage.setItem('token', token);
         await getUser(token);
         navigate('/userPage');
@@ -70,16 +67,14 @@ export const UserStorage = ({ children }) => {
       setError(errorMessage);
       setLogin(false);
       throw err;
-    } finally {
-      setLoading(false);
     }
   };
 
   const tokenValidate = async (token) => {
     const { url, config } = TOKEN_VALIDATE_POST(token);
     try {
-      const loginRes = await axios.post(url, {}, config); // {} = data = vazio
-      // console.log(loginRes.data);
+      const { response, json } = await request(url, 'post', {}, config); // {} = body(data) = vazio
+      console.log(json);
     } catch (err) {
       console.log(err);
       throw err;

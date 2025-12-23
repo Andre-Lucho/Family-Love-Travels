@@ -6,18 +6,19 @@ const useFetch = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const request = useCallback(async (url, method, body = null, config = {}) => {
+  const request = useCallback(async (url, method, body, config) => {
     let res;
     try {
       setError(null);
       setLoading(true);
-      res = await axios({ url, method, data: body, config });
+      res = await axios({ url, method, data: body, ...config });
       setData(res.data);
       return { response: res, json: res.data };
-    } catch (erro) {
+    } catch (err) {
       setData(null);
-      setError(erro.message);
-      return { response: null, json: null };
+      const msg = err.response?.data?.message || err.message;
+      setError(msg);
+      return { response: msg, json: null };
     } finally {
       setLoading(false);
     }
@@ -25,8 +26,11 @@ const useFetch = () => {
 
   return {
     request,
+    setData,
     data,
+    setError,
     error,
+    setLoading,
     loading,
   };
 };

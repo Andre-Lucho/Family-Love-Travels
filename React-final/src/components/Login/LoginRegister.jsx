@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect } from 'react';
 import { UserContext } from '../../UserContext';
 
-// import axios from 'axios';
+import axios from 'axios';
 import { USER_POST } from '../../api.js';
 
 import Input from '../Form/Input';
@@ -19,24 +19,25 @@ const LoginRegister = () => {
   const { userLogin } = useContext(UserContext);
   const { request, loading, error } = useFetch();
 
-  useEffect(() => console.log(id), [id]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (username.validate() && email.validate() && password.validate()) {
+      console.log('ok');
       const { url, body } = USER_POST({
         username: username.value,
         email: email.value,
         password: password.value,
       });
       try {
-        const user = await request(url, 'post', body);
-        if (user.data) {
-          setId(user.data);
+        const response = await axios.post(url, body, {});
+        if ((response && response.status === 200) || response.status === 201) {
+          setId(response.data);
+          console.log('chamando userLogin()...');
           await userLogin(username.value, password.value);
         }
       } catch (err) {
         console.log(err.response);
+        throw err;
       }
     }
   };
