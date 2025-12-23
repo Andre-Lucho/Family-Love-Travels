@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { UserStorage } from './UserContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './components/Home';
-import UserPage from './components/UserPage';
-
+import User from './components/User/User';
+import ProtectedRoute from './components/Helper/ProtectedRoute';
 import Login from './components/Login/Login';
-import { UserStorage } from './UserContext';
 
 function App() {
   return (
@@ -16,7 +16,14 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="login/*" element={<Login />} />
-            <Route path="userPage/*" element={<UserPage />} />
+            <Route
+              path="user/*"
+              element={
+                <ProtectedRoute>
+                  <User />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
           <Footer />
         </UserStorage>

@@ -33,7 +33,7 @@ const LoginForm = () => {
   //  max-md:grid-cols-1
   return (
     <section className="grid grid-cols-2 min-h-dvh mt-6 px-2 gap-6 [main-container]">
-      <div className="row-span-3 bg-[url('../assets/grecia.jpg')] ml-3 bg-cover bg-center bg-no-repeat rounded-md [img-container]"></div>
+      <div className="row-span-3 bg-[url('../../assets/grecia.jpg')] ml-3 bg-cover bg-center bg-no-repeat rounded-md [img-container]"></div>
       <div className="flex border-6 text-[#2f4657ff] rounded container-externo">
         <section className="flex-1 w-full">
           <div className="bg-[#1569cf] mx-6 p-6">

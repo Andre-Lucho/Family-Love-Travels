@@ -9,7 +9,7 @@ import { UserContext } from '../../UserContext';
 const Login = () => {
   const { login } = useContext(UserContext);
 
-  if (login) return <Navigate to="/userPage" />;
+  if (login) return <Navigate to="/user" />;
   return (
     <section>
       <div>

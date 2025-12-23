@@ -7,11 +7,13 @@ import useFetch from './components/Hooks/useFetch.jsx';
 export const UserContext = createContext();
 
 export const UserStorage = ({ children }) => {
-  const [login, setLogin] = useState(false);
+  const [login, setLogin] = useState(null);
   const { request, setData, setLoading, setError, data, loading, error } =
     useFetch();
 
   const navigate = useNavigate();
+
+  useEffect(() => console.log(login), [login]);
 
   useEffect(() => {
     const autoLogin = async () => {
@@ -30,6 +32,8 @@ export const UserStorage = ({ children }) => {
         } finally {
           setLoading(false);
         }
+      } else {
+        setLogin(false);
       }
     };
     autoLogin();
@@ -83,7 +87,7 @@ export const UserStorage = ({ children }) => {
 
   const userLogout = () => {
     try {
-      setLogin(false);
+      setLogin(null);
       setData(null);
       setLoading(false);
       localStorage.removeItem('token');
